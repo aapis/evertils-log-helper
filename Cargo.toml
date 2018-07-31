@@ -1,0 +1,14 @@
+[package]
+name = "log"
+version = "0.1.0"
+authors = ["Ryan Priebe <rpriebe@me.com>"]
+
+[dependencies]
+
+[[bin]]
+name = "log"
+path = "src/log.rs"
+
+[[bin]]
+name = "logt"
+path = "src/logt.rs"
