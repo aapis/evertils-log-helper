@@ -17,5 +17,17 @@ name = "logt"
 path = "src/logt.rs"
 
 [[bin]]
+name = "log-yesterday"
+path = "src/log_yesterday.rs"
+
+[[bin]]
+name = "log-today"
+path = "src/log_today.rs"
+
+[[bin]]
+name = "logm"
+path = "src/logm.rs"
+
+[[bin]]
 name = "newday"
 path = "src/newday.rs"
