@@ -1,5 +1,5 @@
 [package]
-name = "log"
+name = "evertils-log-helper"
 version = "0.1.0"
 authors = ["Ryan Priebe <rpriebe@me.com>"]
 
