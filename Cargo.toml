@@ -12,3 +12,7 @@ path = "src/log.rs"
 [[bin]]
 name = "logt"
 path = "src/logt.rs"
+
+[[bin]]
+name = "newday"
+path = "src/newday.rs"
