@@ -9,3 +9,5 @@ Previously, my most commonly used tools were written in [bash](https://gist.gith
 ## Dependencies
 
 As this just wraps the [evertils](https://github.com/aapis/evertils) package, you need that.
+
+You also need to create a log file at location `~/.evertils/rolling.log`.
