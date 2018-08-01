@@ -5,3 +5,7 @@ Previously, my most commonly used tools were written in [bash](https://gist.gith
 ## Install
 
 `cargo install evertils-log-helper`
+
+## Dependencies
+
+As this just wraps the [evertils](https://github.com/aapis/evertils) package, you need that.
