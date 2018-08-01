@@ -3,13 +3,15 @@ mod logt {
     use std::process::Command;
     use std::io;
     use std::string::String;
+    use std::any::Any;
+    use std::fmt::Debug;
 
     fn success(size: usize, job_number: String, message: String) {
         if size < 6 {
             let command_string: String = format!(
                 "evertils log message \"{} - {}\"",
                 job_number,
-                 message
+                message
             );
 
             let output = Command::new("sh")
@@ -18,24 +20,39 @@ mod logt {
                                 .output()
                                 .expect("failed to execute");
 
-
-            self::print_output<std::process::Output>(output.stdout);
+            print_output(&output.stdout);
         }
     }
 
-    fn error(error: io::Error) {
-        println!("error: {}", error);
+    fn err(error: io::Error) {
+        println!("error: {}", error.to_string());
     }
 
-    fn print_output<T>(output: T) {
-        let resp = String::from_utf8(output.stdout).unwrap();
+    fn print_output<T: Any + Debug>(value: &T) {
+        let value_any = value as &Any;
 
-        println!("{}", resp);
+        match value_any.downcast_ref::<Vec<u8>>() {
+            Some(ref string) => {
+                let resp = String::from_utf8(string.to_vec()).unwrap();
+                println!("{}", resp);
+            }
+            None => {
+                // pass
+            }
+        }
+
+        match value_any.downcast_ref::<String>() {
+            Some(string) => {
+                println!("{}", string);
+            }
+            None => {
+                // pass
+            }
+        }
     }
 
-    pub fn exec() {
-        let args: Vec<String> = env::args().collect();
-        let message = &args[1];
+    fn exec(args: Vec<String>) {
+        let message: String = args[1].to_string();
 
         println!("Task number?");
 
@@ -44,12 +61,23 @@ mod logt {
 
         // gets input and passes it to evertils
         match io::stdin().read_line(&mut job_number) {
-            Ok(n) => self::success(n, job_number, message.to_string()),
-            Err(error) => self::error(error),
+            Ok(n) => success(n, job_number, message),
+            Err(error) => err(error),
+        }
+    }
+
+    pub fn new() {
+        let args:  Vec<String> = env::args().collect();
+
+        if args.len() > 1 {
+            exec(args);
+        } else {
+            let err_message: String = "Not enough args, 1 required".to_string();
+            print_output(&err_message);
         }
     }
 }
 
 fn main() {
-    logt::exec();
+    logt::new();
 }
