@@ -1,3 +1,7 @@
+extern crate chrono;
+
+mod helper;
+
 mod logt {
     use std::env;
     use std::process::Command;
@@ -5,6 +9,7 @@ mod logt {
     use std::string::String;
     use std::any::Any;
     use std::fmt::Debug;
+    use helper;
 
     fn success(size: usize, job_number: String, message: String) {
         if size < 6 {
@@ -19,6 +24,12 @@ mod logt {
                                 .arg(command_string)
                                 .output()
                                 .expect("failed to execute");
+
+            // TODO: this prints on 2 lines, should only print on one
+            // let rlog_msg: String = format!("{} - {}", job_number, message);
+            let rlog_msg: String = message;
+            // make sure the data is appended to the rolling log
+            helper::rolling_log::update(rlog_msg);
 
             print_output(&output.stdout);
         }
@@ -67,7 +78,7 @@ mod logt {
     }
 
     pub fn new() {
-        let args:  Vec<String> = env::args().collect();
+        let args: Vec<String> = env::args().collect();
 
         if args.len() > 1 {
             exec(args);
