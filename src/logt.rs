@@ -68,7 +68,7 @@ mod logt {
     }
 
     fn exec(args: Vec<String>) {
-        let message: String = args[1].to_string();
+        let message: String = args[1].to_owned();
 
         println!("Task number?");
 
@@ -88,7 +88,7 @@ mod logt {
         if args.len() > 1 {
             exec(args);
         } else {
-            let err_message: String = "Not enough args, 1 required".to_string();
+            let err_message: String = "Not enough args, 1 required".to_owned();
             print_output(&err_message);
         }
     }

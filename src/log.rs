@@ -20,7 +20,7 @@ mod log {
 
         // TODO: this prints on 2 lines, should only print on one
         // let rlog_msg: String = format!("{} - {}", job_number, message);
-        let rlog_msg: String = message.to_string();
+        let rlog_msg: String = message.to_owned();
         // make sure the data is appended to the rolling log
         helper::rolling_log::update(rlog_msg);
 
