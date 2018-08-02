@@ -1,3 +1,4 @@
+// log a string
 extern crate chrono;
 
 mod helper;
