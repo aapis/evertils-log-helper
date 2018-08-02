@@ -12,6 +12,7 @@ mod logt {
     use std::fmt::Debug;
     use helper;
 
+    /// Create a subshell and execute the command
     fn success(size: usize, job_number: String, message: String) {
         if size < 6 {
             let command_string: String = format!(
@@ -21,10 +22,10 @@ mod logt {
             );
 
             let output = Command::new("sh")
-                                .arg("-c")
-                                .arg(command_string)
-                                .output()
-                                .expect("failed to execute");
+                .arg("-c")
+                .arg(command_string)
+                .output()
+                .expect("failed to execute");
 
             // TODO: this prints on 2 lines, should only print on one
             // let rlog_msg: String = format!("{} - {}", job_number, message);
@@ -36,10 +37,12 @@ mod logt {
         }
     }
 
+    /// An error occurred, print a message
     fn err(error: io::Error) {
         println!("error: {}", error.to_string());
     }
 
+    /// Prints formatted output
     fn print_output<T: Any + Debug>(value: &T) {
         let value_any = value as &Any;
 
@@ -67,6 +70,7 @@ mod logt {
         }
     }
 
+    /// Get user input and funnel it to an output method
     fn exec(args: Vec<String>) {
         let message: String = args[1].to_owned();
 
@@ -82,6 +86,7 @@ mod logt {
         }
     }
 
+    /// Create a new instance of logt
     pub fn new() {
         let args: Vec<String> = env::args().collect();
 
