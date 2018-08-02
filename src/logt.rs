@@ -45,7 +45,11 @@ mod logt {
 
         match value_any.downcast_ref::<Vec<u8>>() {
             Some(ref string) => {
-                let resp = String::from_utf8(string.to_vec()).unwrap();
+                // print the output without the final newline character
+                let mut resp = String::from_utf8(string.to_vec()).unwrap();
+                let len: usize = resp.len();
+                resp.truncate(len - 2);
+
                 println!("{}", resp);
             }
             None => {
