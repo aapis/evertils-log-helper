@@ -11,7 +11,7 @@ fn write_generic(message: String) {
                 .open(format!("{}/.evertils/rolling.log", path.display()))
                 .unwrap();
 
-            if let Err(e) = write!(file, "{}", message) {
+            if let Err(e) = write!(file, "\n{}", message) {
                 println!("Error writing to rolling log: {}", e);
             }
         },
