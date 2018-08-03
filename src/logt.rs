@@ -7,9 +7,6 @@ mod logt {
     use std::env;
     use std::process::Command;
     use std::io;
-    use std::string::String;
-    use std::any::Any;
-    use std::fmt::Debug;
     use helper;
 
     /// Create a subshell and execute the command
@@ -33,41 +30,13 @@ mod logt {
             // make sure the data is appended to the rolling log
             helper::rolling_log::update(rlog_msg);
 
-            print_output(&output.stdout);
+            helper::output::print(&output.stdout);
         }
     }
 
     /// An error occurred, print a message
     fn err(error: io::Error) {
         println!("error: {}", error.to_string());
-    }
-
-    /// Prints formatted output
-    fn print_output<T: Any + Debug>(value: &T) {
-        let value_any = value as &Any;
-
-        match value_any.downcast_ref::<Vec<u8>>() {
-            Some(ref string) => {
-                // print the output without the final newline character
-                let mut resp = String::from_utf8(string.to_vec()).unwrap();
-                let len: usize = resp.len();
-                resp.truncate(len - 2);
-
-                println!("{}", resp);
-            }
-            None => {
-                // pass
-            }
-        }
-
-        match value_any.downcast_ref::<String>() {
-            Some(string) => {
-                println!("{}", string);
-            }
-            None => {
-                // pass
-            }
-        }
     }
 
     /// Get user input and funnel it to an output method
@@ -94,7 +63,7 @@ mod logt {
             exec(args);
         } else {
             let err_message: String = "Not enough args, 1 required".to_owned();
-            print_output(&err_message);
+            helper::output::print(&err_message);
         }
     }
 }
