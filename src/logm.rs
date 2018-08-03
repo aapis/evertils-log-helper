@@ -1,4 +1,4 @@
-// log a string
+// log monitoring items
 extern crate chrono;
 
 mod helper;
@@ -14,7 +14,7 @@ mod log {
 
         let output = Command::new("sh")
                 .arg("-c")
-                .arg(format!("evertils log message {}", message))
+                .arg(format!("evertils log message \"monitoring - {}\"", message))
                 .output()
                 .expect("failed to execute");
 
