@@ -1,5 +1,4 @@
 use chrono::prelude::*;
-use std::string::String;
 use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::env;
@@ -40,12 +39,12 @@ fn write(message: String) {
 }
 
 pub fn update(message: String) {
-    self::write(message);
+    write(message);
 }
 
 pub fn new_day() {
     let date = Local::now();
     let message: String = format!("=====================\n{}\n=====================", date);
 
-    self::write_generic(message);
+    write_generic(message);
 }
