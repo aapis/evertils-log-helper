@@ -8,6 +8,7 @@ mod logt {
     use std::process::Command;
     use std::io;
     use helper;
+    use helper::log::Writer;
 
     /// Create a subshell and execute the command
     fn success(size: usize, job_number: String, message: String) {
@@ -27,8 +28,10 @@ mod logt {
             // TODO: this prints on 2 lines, should only print on one
             // let rlog_msg: String = format!("{} - {}", job_number, message);
             let rlog_msg: String = message;
+
             // make sure the data is appended to the rolling log
-            helper::rolling_log::update(rlog_msg);
+            let writer: Writer = Writer { message: rlog_msg }
+            writer.write();
 
             helper::output::print(&output.stdout);
         }

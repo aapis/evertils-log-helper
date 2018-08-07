@@ -1,2 +1,2 @@
-pub mod rolling_log;
+pub mod log;
 pub mod output;

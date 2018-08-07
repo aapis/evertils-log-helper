@@ -22,7 +22,7 @@ mod log {
         // let rlog_msg: String = format!("{} - {}", job_number, message);
         let rlog_msg: String = message.to_owned();
         // make sure the data is appended to the rolling log
-        helper::rolling_log::update(rlog_msg);
+        // helper::rolling_log::write(rlog_msg);
 
         let _ = output.stdout;
     }

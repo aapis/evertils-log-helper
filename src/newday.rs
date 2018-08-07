@@ -16,7 +16,8 @@ mod newday {
             .output()
             .expect("failed to execute");
 
-        helper::rolling_log::new_day();
+        // helper::log::banner();
+        let writer: Writer = Writer { message: &output.stdout, banner: true }
 
         helper::output::print(&output.stdout);
     }
