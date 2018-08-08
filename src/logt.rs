@@ -9,7 +9,7 @@ mod logt {
     use std::process::Command;
     use std::io;
     use writer::{Line, MessageWriter};
-    use output;
+    use output::{TerminalLine, TerminalMessageWriter};
 
     /// Create a subshell and execute the command
     fn success(size: usize, job_number: String, message: String) {
@@ -32,7 +32,8 @@ mod logt {
             let writer: Line = Line { message: message };
             writer.write_now();
 
-            output::print(&output.stdout);
+            let output: TerminalLine = TerminalLine { message: &output.stdout };
+            output.write_generic(&output.stdout);
         }
     }
 

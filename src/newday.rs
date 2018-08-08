@@ -8,22 +8,17 @@ mod newday {
     use std::env;
     use std::process::Command;
     use writer::{Banner, DefaultWriter};
-    use output::{TerminalBanner, TerminalDefaultWriter};
 
     /// Append the required text to the log file
     fn exec() {
-        // let output = Command::new("sh")
-        //     .arg("-c")
-        //     .arg("evertils generate morning")
-        //     .output()
-        //     .expect("failed to execute");
+        let output = Command::new("sh")
+            .arg("-c")
+            .arg("evertils generate morning")
+            .output()
+            .expect("failed to execute");
 
-        // let writer: Banner = Banner;
-        // writer.write_generic();
-
-        let output: TerminalBanner = TerminalBanner;
-        output.write_generic();
-        // output::print(&output.stdout);
+        let writer: Banner = Banner;
+        writer.write_generic();
     }
 
     pub fn new() {

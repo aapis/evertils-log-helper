@@ -1,5 +1,6 @@
 use std::any::Any;
 use std::fmt::Debug;
+use chrono::prelude::*;
 
 pub trait TerminalMessageWriter {
     fn write_generic(&self, message: String);
@@ -50,7 +51,7 @@ pub struct TerminalCustomBanner {
 
 impl TerminalMessageWriter for TerminalLine {
     fn write_generic(&self, message: String) {
-        self.write(message);
+        self.write(&message);
     }
 
     fn write_now(&self) {
@@ -71,13 +72,13 @@ impl TerminalMessageWriter for TerminalCustomBanner {
     fn write_generic(&self, message: String) {
         let default_banner: String = format!("=====================\n{}\n=====================", message);
 
-        self.write(default_banner);
+        self.write(&default_banner);
     }
 
     fn write_now(&self) {
         let date = Local::now();
         let default_banner: String = format!("=====================\n{}\n=====================", date);
 
-        self.write(default_banner);
+        self.write(&default_banner);
     }
 }

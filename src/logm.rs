@@ -8,7 +8,7 @@ mod log {
     use std::env;
     use std::process::Command;
     use writer::{Line, MessageWriter};
-    use output;
+    use output::{TerminalLine, TerminalMessageWriter};
 
     pub fn exec() {
         let args: Vec<String> = env::args().collect();
@@ -25,7 +25,8 @@ mod log {
         let writer: Line = Line { message: message.to_string() };
         writer.write_now();
 
-        output::print(&output.stdout);
+        let output: TerminalLine = TerminalLine { message: &output.stdout };
+        output.write_generic(&output.stdout);
     }
 }
 
