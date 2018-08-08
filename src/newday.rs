@@ -1,27 +1,29 @@
 // start a new day
 extern crate chrono;
 
-mod helper;
-mod log_writer;
+mod writer;
+mod output;
 
 mod newday {
     use std::env;
     use std::process::Command;
-    use helper;
-    use log_writer::{Banner, DefaultWriter};
+    use writer::{Banner, DefaultWriter};
+    use output::{TerminalBanner, TerminalDefaultWriter};
 
     /// Append the required text to the log file
     fn exec() {
-        let output = Command::new("sh")
-            .arg("-c")
-            .arg("evertils generate morning")
-            .output()
-            .expect("failed to execute");
+        // let output = Command::new("sh")
+        //     .arg("-c")
+        //     .arg("evertils generate morning")
+        //     .output()
+        //     .expect("failed to execute");
 
-        let writer: Banner = Banner;
-        writer.write_generic();
+        // let writer: Banner = Banner;
+        // writer.write_generic();
 
-        helper::output::print(&output.stdout);
+        let output: TerminalBanner = TerminalBanner;
+        output.write_generic();
+        // output::print(&output.stdout);
     }
 
     pub fn new() {

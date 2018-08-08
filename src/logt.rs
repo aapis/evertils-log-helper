@@ -1,15 +1,15 @@
 // log task-oriented items
 extern crate chrono;
 
-mod helper;
-mod log_writer;
+mod writer;
+mod output;
 
 mod logt {
     use std::env;
     use std::process::Command;
     use std::io;
-    use helper;
-    use log_writer::{Line, MessageWriter};
+    use writer::{Line, MessageWriter};
+    use output;
 
     /// Create a subshell and execute the command
     fn success(size: usize, job_number: String, message: String) {
@@ -32,7 +32,7 @@ mod logt {
             let writer: Line = Line { message: message };
             writer.write_now();
 
-            helper::output::print(&output.stdout);
+            output::print(&output.stdout);
         }
     }
 
@@ -60,7 +60,7 @@ mod logt {
             exec(args);
         } else {
             let err_message: String = "Not enough args, 1 required".to_owned();
-            helper::output::print(&err_message);
+            output::print(&err_message);
         }
     }
 }
