@@ -2,13 +2,14 @@
 extern crate chrono;
 
 mod helper;
+mod log_writer;
 
 mod logt {
     use std::env;
     use std::process::Command;
     use std::io;
     use helper;
-    use helper::log::Writer;
+    use log_writer::{Line, MessageWriter};
 
     /// Create a subshell and execute the command
     fn success(size: usize, job_number: String, message: String) {
@@ -27,19 +28,23 @@ mod logt {
 
             // TODO: this prints on 2 lines, should only print on one
             // let rlog_msg: String = format!("{} - {}", job_number, message);
-            let rlog_msg: String = message;
-
             // make sure the data is appended to the rolling log
-            let writer: Writer = Writer { message: rlog_msg }
-            writer.write();
+            let writer: Line = Line {
+                message: message,
+            };
+            writer.write_now();
 
             helper::output::print(&output.stdout);
         }
     }
 
-    /// An error occurred, print a message
-    fn err(error: io::Error) {
-        println!("error: {}", error.to_string());
+    /// Message may be null
+    fn prepare(message: String) -> Option<String> {
+        if message.len() > 0 {
+            Some(message)
+        } else {
+            None
+        }
     }
 
     /// Get user input and funnel it to an output method
@@ -54,7 +59,7 @@ mod logt {
         // gets input and passes it to evertils
         match io::stdin().read_line(&mut job_number) {
             Ok(n) => success(n, job_number, message),
-            Err(error) => err(error),
+            Err(error) => println!("error: {}", error.to_owned());,
         }
     }
 
