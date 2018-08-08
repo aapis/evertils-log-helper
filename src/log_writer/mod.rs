@@ -7,9 +7,7 @@ pub trait MessageWriter {
     fn write_generic(&self, message: String);
     fn write_now(&self);
 
-    fn write(&self, message: &mut String) {
-        self.prepare(message);
-
+    fn write(&self, message: String) {
         match env::home_dir() {
             Some(path) => {
                 let mut file = OpenOptions::new()
@@ -24,14 +22,6 @@ pub trait MessageWriter {
             None => println!("Impossible to get your home dir!"),
         }
     }
-
-    fn prepare(&self, message: &mut String) -> Option<String> {
-        if message.to_owned().len() > 0 {
-            Some(message.to_owned())
-        } else {
-            None
-        }
-    }
 }
 
 pub trait DefaultWriter {
@@ -39,37 +29,31 @@ pub trait DefaultWriter {
 }
 
 pub struct Line {
-    pub message: Option<String>
+    pub message: String
 }
 
 pub struct Banner;
 
 pub struct CustomBanner {
-    pub message: Option<String>
+    pub message: String
 }
 
 impl MessageWriter for Line {
     fn write_generic(&self, message: String) {
-        self.write(&mut message);
+        self.write(message);
     }
 
     fn write_now(&self) {
         let dt = Local::now();
+        let fmt_message: String = format!("\n{}/{}/{} - {}", dt.month(), dt.day(), dt.year(), self.message);
 
-        match self.message {
-            Some(ref msg) => {
-                let fmt_message: String = format!("\n{}/{}/{} - {}", dt.month(), dt.day(), dt.year(), msg);
-
-                self.write_generic(fmt_message);
-            }
-            None => println!("Error formatting log message"),
-        }
+        self.write_generic(fmt_message);
     }
 }
 
 impl DefaultWriter for Banner {
     fn write_generic(&self) {
-        CustomBanner { message: Option::None }.write_now();
+        CustomBanner { message: String::new() }.write_now();
     }
 }
 
@@ -77,13 +61,13 @@ impl MessageWriter for CustomBanner {
     fn write_generic(&self, message: String) {
         let default_banner: String = format!("=====================\n{}\n=====================", message);
 
-        self.write(&mut default_banner);
+        self.write(default_banner);
     }
 
     fn write_now(&self) {
         let date = Local::now();
         let default_banner: String = format!("=====================\n{}\n=====================", date);
 
-        self.write(&mut default_banner);
+        self.write(default_banner);
     }
 }

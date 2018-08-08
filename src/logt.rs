@@ -29,21 +29,10 @@ mod logt {
             // TODO: this prints on 2 lines, should only print on one
             // let rlog_msg: String = format!("{} - {}", job_number, message);
             // make sure the data is appended to the rolling log
-            let writer: Line = Line {
-                message: message,
-            };
+            let writer: Line = Line { message: message };
             writer.write_now();
 
             helper::output::print(&output.stdout);
-        }
-    }
-
-    /// Message may be null
-    fn prepare(message: String) -> Option<String> {
-        if message.len() > 0 {
-            Some(message)
-        } else {
-            None
         }
     }
 
@@ -58,8 +47,8 @@ mod logt {
 
         // gets input and passes it to evertils
         match io::stdin().read_line(&mut job_number) {
-            Ok(n) => success(n, job_number, message),
-            Err(error) => println!("error: {}", error.to_owned());,
+            Ok(jn_size) => success(jn_size, job_number, message),
+            Err(error) => println!("error: {:?}", error),
         }
     }
 
