@@ -2,11 +2,13 @@
 extern crate chrono;
 
 mod helper;
+mod log_writer;
 
 mod newday {
     use std::env;
     use std::process::Command;
     use helper;
+    use log_writer::{Banner, DefaultWriter};
 
     /// Append the required text to the log file
     fn exec() {
@@ -16,8 +18,8 @@ mod newday {
             .output()
             .expect("failed to execute");
 
-        // helper::log::banner();
-        let writer: Writer = Writer { message: &output.stdout, banner: true }
+        let writer: Banner = Banner;
+        writer.write_generic();
 
         helper::output::print(&output.stdout);
     }
