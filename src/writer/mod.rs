@@ -5,7 +5,8 @@ use std::env;
 
 pub trait MessageWriter {
     fn write_generic(&self, message: String);
-    fn write_now(&self);
+    fn write_now(&self, message: String);
+    fn write_empty(&self);
 
     fn write(&self, message: String) {
         match env::home_dir() {
@@ -25,35 +26,38 @@ pub trait MessageWriter {
 }
 
 pub trait DefaultWriter {
-    fn write_generic(&self);
+    fn write_generic(&self, message: String);
+    fn write_empty(&self);
 }
 
-pub struct Line {
-    pub message: String
-}
-
+pub struct Line;
 pub struct Banner;
-
-pub struct CustomBanner {
-    pub message: String
-}
+pub struct CustomBanner;
 
 impl MessageWriter for Line {
     fn write_generic(&self, message: String) {
         self.write(message);
     }
 
-    fn write_now(&self) {
+    fn write_now(&self, message: String) {
         let dt = Local::now();
-        let fmt_message: String = format!("\n{}/{}/{} - {}", dt.month(), dt.day(), dt.year(), self.message);
+        let fmt_message: String = format!("\n{}/{}/{} - {}", dt.month(), dt.day(), dt.year(), message);
 
-        self.write_generic(fmt_message);
+        self.write(fmt_message);
+    }
+
+    fn write_empty(&self) {
+        self.write(String::new());
     }
 }
 
 impl DefaultWriter for Banner {
-    fn write_generic(&self) {
-        CustomBanner { message: String::new() }.write_now();
+    fn write_generic(&self, message: String) {
+        CustomBanner {}.write_generic(message);
+    }
+
+    fn write_empty(&self) {
+        CustomBanner {}.write_empty();
     }
 }
 
@@ -64,7 +68,14 @@ impl MessageWriter for CustomBanner {
         self.write(default_banner);
     }
 
-    fn write_now(&self) {
+    fn write_now(&self, message: String) {
+        let date = Local::now();
+        let default_banner: String = format!("=====================\n{}\n{}\n=====================", date, message);
+
+        self.write(default_banner);
+    }
+
+    fn write_empty(&self) {
         let date = Local::now();
         let default_banner: String = format!("=====================\n{}\n=====================", date);
 

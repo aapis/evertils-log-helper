@@ -21,11 +21,11 @@ mod log {
                 .expect("failed to execute");
 
         // make sure the data is appended to the rolling log
-        let writer: Line = Line { message: message.to_string() };
-        writer.write_now();
+        let writer: Line = Line;
+        writer.write_now(message.to_string());
 
-        let output: TerminalLine = TerminalLine { message: &output.stdout };
-        output.write_generic(&output.stdout);
+        let vec_out: TerminalLine<Vec<u8>> = TerminalLine;
+        vec_out.write_generic(output.stdout);
     }
 }
 

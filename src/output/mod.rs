@@ -1,13 +1,14 @@
 use std::any::Any;
+use std::fmt::Display;
 use std::fmt::Debug;
 use chrono::prelude::*;
 
-pub trait TerminalMessageWriter {
-    fn write_generic(&self, message: String);
-    fn write_now(&self);
+pub trait TerminalMessageWriter<T> {
+    fn write_generic(&self, message: T);
+    fn write_now(&self, message: T);
 
     /// Prints formatted output
-    fn write<T: Any + Debug>(&self, value: &T) {
+    fn write<G: Any + Debug>(&self, value: &G) {
         let value_any = value as &Any;
 
         match value_any.downcast_ref::<Vec<u8>>() {
@@ -35,49 +36,44 @@ pub trait TerminalMessageWriter {
     }
 }
 
-pub trait TerminalDefaultWriter {
-    fn write_generic(&self);
+pub trait TerminalDefaultWriter<T> {
+    fn write_generic(&self, message: &T);
 }
 
-pub struct TerminalLine {
-    pub message: String
-}
+pub struct TerminalLine<T>;
+pub struct TerminalBanner<T>;
+pub struct TerminalCustomBanner<T>;
 
-pub struct TerminalBanner;
 
-pub struct TerminalCustomBanner {
-    pub message: String
-}
-
-impl TerminalMessageWriter for TerminalLine {
-    fn write_generic(&self, message: String) {
+impl <T> TerminalMessageWriter<T> for TerminalLine<T> {
+    fn write_generic(&self, message: T) {
         self.write(&message);
     }
 
-    fn write_now(&self) {
+    fn write_now(&self, message: T) {
         let dt = Local::now();
-        let fmt_message: String = format!("\n{}/{}/{} - {}", dt.month(), dt.day(), dt.year(), self.message);
+        let fmt_message: T = format!("\n{}/{}/{} - {}", dt.month(), dt.day(), dt.year(), message);
 
         self.write_generic(fmt_message);
     }
 }
 
-impl TerminalDefaultWriter for TerminalBanner {
-    fn write_generic(&self) {
-        TerminalCustomBanner { message: String::new() }.write_now();
+impl <T> TerminalDefaultWriter<T> for TerminalBanner<T> {
+    fn write_generic(&self, message: T) {
+        TerminalCustomBanner::<T>.write_generic(message);
     }
 }
 
-impl TerminalMessageWriter for TerminalCustomBanner {
-    fn write_generic(&self, message: String) {
-        let default_banner: String = format!("=====================\n{}\n=====================", message);
+impl <T> TerminalMessageWriter<T> for TerminalCustomBanner<T> {
+    fn write_generic(&self, message: T) {
+        let default_banner: T = format!("=====================\n{}\n=====================", message);
 
         self.write(&default_banner);
     }
 
-    fn write_now(&self) {
+    fn write_now(&self, message: T) {
         let date = Local::now();
-        let default_banner: String = format!("=====================\n{}\n=====================", date);
+        let default_banner: T = format!("=====================\n{}\n{}\n=====================", date, message);
 
         self.write(&default_banner);
     }
