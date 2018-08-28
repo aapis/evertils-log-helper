@@ -1,12 +1,13 @@
 // start a new day
 extern crate chrono;
 
-mod helper;
+mod writer;
+mod output;
 
 mod newday {
     use std::env;
     use std::process::Command;
-    use helper;
+    use writer::{Banner, DefaultWriter};
 
     /// Append the required text to the log file
     fn exec() {
@@ -16,9 +17,8 @@ mod newday {
             .output()
             .expect("failed to execute");
 
-        helper::rolling_log::new_day();
-
-        helper::output::print(&output.stdout);
+        let writer: Banner = Banner;
+        writer.write_generic();
     }
 
     pub fn new() {

@@ -1,13 +1,15 @@
 // log task-oriented items
 extern crate chrono;
 
-mod helper;
+mod writer;
+mod output;
 
 mod logt {
     use std::env;
     use std::process::Command;
     use std::io;
-    use helper;
+    use writer::{Line, MessageWriter};
+    use output::{TerminalLine, TerminalMessageWriter};
 
     /// Create a subshell and execute the command
     fn success(size: usize, job_number: String, message: String) {
@@ -26,17 +28,13 @@ mod logt {
 
             // TODO: this prints on 2 lines, should only print on one
             // let rlog_msg: String = format!("{} - {}", job_number, message);
-            let rlog_msg: String = message;
             // make sure the data is appended to the rolling log
-            helper::rolling_log::update(rlog_msg);
+            let writer: Line = Line;
+            writer.write_now(message.to_string());
 
-            helper::output::print(&output.stdout);
+            let vec_out: TerminalLine<Vec<u8>> = TerminalLine;
+            vec_out.write_generic(output.stdout);
         }
-    }
-
-    /// An error occurred, print a message
-    fn err(error: io::Error) {
-        println!("error: {}", error.to_string());
     }
 
     /// Get user input and funnel it to an output method
@@ -50,8 +48,8 @@ mod logt {
 
         // gets input and passes it to evertils
         match io::stdin().read_line(&mut job_number) {
-            Ok(n) => success(n, job_number, message),
-            Err(error) => err(error),
+            Ok(jn_size) => success(jn_size, job_number, message),
+            Err(error) => println!("error: {:?}", error),
         }
     }
 
@@ -62,8 +60,8 @@ mod logt {
         if args.len() > 1 {
             exec(args);
         } else {
-            let err_message: String = "Not enough args, 1 required".to_owned();
-            helper::output::print(&err_message);
+            let output: TerminalLine = TerminalLine;
+            output.write_generic(String::from("Not enough args, 1 required"));
         }
     }
 }
