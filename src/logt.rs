@@ -11,7 +11,7 @@ mod logt {
 
     /// Create a subshell and execute the command
     fn success(size: usize, job_number: String, message: String) {
-        if size < 6 {
+        if size < 25 {
             let command_string: String = format!(
                 "evertils log message \"{} - {}\"",
                 job_number,
