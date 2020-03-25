@@ -12,7 +12,7 @@ mod newday {
     fn exec() {
         let output = Command::new("sh")
             .arg("-c")
-            .arg("evertils generate morning")
+            .arg("evertils generate daily")
             .output()
             .expect("failed to execute");
 
