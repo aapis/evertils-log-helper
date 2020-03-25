@@ -1,6 +1,6 @@
 [package]
 name = "evertils-log-helper"
-version = "0.3.1"
+version = "0.4.0"
 authors = ["Ryan Priebe <rpriebe@me.com>"]
 description = "Wraps evertils logging commands in a rust package"
 license = "WTFPL"
